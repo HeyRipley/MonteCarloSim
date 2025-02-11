@@ -144,7 +144,7 @@ double run_simulation(double work_income_start)
 int main() 
 {
     double low_income = 0;
-    double high_income = 200000;  // Adjust as needed
+    double high_income = 500000;  // Adjust as needed
     double target_median_savings = 1000000;  // Adjust as needed
     double tolerance = 5000;  // Adjust as needed
 

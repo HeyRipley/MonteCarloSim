@@ -164,10 +164,10 @@ int main() {
 
     // --- Define Simulation Parameters ---
     // !!! Use your actual plan numbers !!!
-    double initial_savings = 1300000;
+    double initial_savings = 25000;
     double work_income_start = 125000;
     double work_income_end = 0;
-    int current_age = 50;
+    int current_age = 27;
     int retirement_age = 55;
     double annual_spending_start = 75000;
     double inflation_rate = 0.04;

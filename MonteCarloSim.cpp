@@ -1,4 +1,4 @@
-#include <vector>
+﻿#include <vector>
 #include <utility>    // For std::pair
 #include <stdexcept>  // For error handling (optional)
 #include <iostream>   // For std::cout, std::cerr
@@ -14,7 +14,7 @@
 
 // --- Control Flags for Printing ---
 const bool PRINT_PER_RUN_SUMMARY = true;  // <<< Set true to see results for each start year
-const bool PRINT_YEARLY_DETAILS = true; // <<< Set true for EXTREME detail (every year of every run)
+const bool PRINT_YEARLY_DETAILS = true  ; // <<< Set true for EXTREME detail (every year of every run)
 
 // --- Historical Data (from your provided code, potentially corrected) ---
 const std::vector<std::pair<int, double>> historical_sp500_price_returns = { // Renamed for clarity
@@ -55,16 +55,14 @@ const std::vector<std::pair<int, double>> speculative_sp500_returns = {
     {2028, 0.0750},  // Steady expansion
     {2029, 0.0550},  // Slight caution, valuation concerns
 
-    // 2030-2034: Mature growth cycle with mid-cycle correction (like 2010s recovery period)
+    // 2030-2042: Mature growth cycle with mid-cycle correction
     {2030, 0.0900},  // Recovery year
     {2031, 0.1050},  // Strong growth
     {2032, 0.0700},  // Moderate growth
-    {2033, -0.1800}, // DEEPER CORRECTION: Geopolitical tension or credit event (like 2008 or 1973)
+    {2033, -0.1800}, // DEEPER CORRECTION: Geopolitical tension or credit event
     {2034, -0.0950}, // Bear market continues
-    {2035, 0.2200},  // Strong recovery (like 1975 post-1974 crash)
+    {2035, 0.2200},  // Strong recovery
     {2036, 0.1100},  // Sustained recovery
-
-    // 2037-2042: New growth cycle (like 1950s expansion, post-crisis recovery)
     {2037, 0.0850},  // Continued growth
     {2038, 0.0750},  // Sustained expansion
     {2039, 0.0950},  // Acceleration
@@ -72,23 +70,31 @@ const std::vector<std::pair<int, double>> speculative_sp500_returns = {
     {2041, 0.0850},  // Continued growth
     {2042, 0.0700},  // Normalizing
 
-    // 2043-2048: Mature cycle with late-cycle weakness (like 1990s-2000s transition)
+    // 2043-2054: Mature cycle with late-cycle weakness
     {2043, 0.0900},  // Strong growth
     {2044, 0.0600},  // Moderation
     {2045, 0.0750},  // Moderate growth
     {2046, 0.0850},  // Solid growth
-    {2047, -0.2400}, // DEEPER BEAR MARKET: Major correction (like 2000-2002 dot-com era)
+    {2047, -0.2400}, // DEEPER BEAR MARKET: Major correction
     {2048, -0.1200}, // Bear market deepens
-    {2049, 0.2800},  // Strong recovery (like 2003 post-crash recovery)
-
-    // 2050-2054: Late projection period (like 2015-2019 expansion)
+    {2049, 0.2800},  // Strong recovery
     {2050, 0.1550},  // Continued recovery momentum
     {2051, 0.0750},  // Growth continues
     {2052, 0.0650},  // Normalizing
     {2053, 0.0800},  // Sustained
-    {2054, 0.0550}   // Cautious outlook
+    {2054, 0.0550},   // Cautious outlook
+    // 2055-2064: Final decade - normalized maturity with cyclical patterns
+       {2055, 0.0750 },  // Steady growth
+       {2056, 0.0900},  // Acceleration
+       {2057, 0.0650},  // Moderation
+       {2058, -0.1100}, // Minor correction
+       {2059, 0.1850},  // Recovery
+       {2060, 0.0800},  // Sustained growth
+       {2061, 0.0950},  // Strong performance
+       {2062, 0.0700},  // Normalizing
+       {2063, 0.0600},  // Moderation
+       {2064, 0.0550}   // Cautious outlook
 };
-            
 const std::vector<std::pair<int, const char*>> sp500_return_reasons = {
     {1928, "Roaring 20s bull market"}, {1929, "Stock market crash"}, {1930, "Great Depression"}, {1931, "Great Depression worsens"},
     {1932, "Depression bottom"}, {1933, "New Deal recovery"}, {1934, "Recovery stalls"}, {1935, "Recovery continues"},
@@ -114,10 +120,19 @@ const std::vector<std::pair<int, const char*>> sp500_return_reasons = {
     {2012, "Recovery"}, {2013, "Bull market"}, {2014, "Bull market"}, {2015, "China slowdown"},
     {2016, "Trump election"}, {2017, "Bull market"}, {2018, "Trade war"}, {2019, "Bull market"},
     {2020, "COVID crash/recovery"}, {2021, "COVID stimulus"}, {2022, "Inflation, rate hikes"}, {2023, "Recovery, AI rally"},
-    {2024, "Speculative"}, {2025, "Conservative speculative"}, {2026, "Conservative speculative"},
-    {2027, "Conservative speculative"}, {2028, "Conservative speculative"}, {2029, "Conservative speculative"},
-    {2030, "Conservative speculative"}
+    {2024, "Market growth"}, {2025, "Growth + AI rally"}, {2026, "Tech momentum"}, {2027, "Stable growth"},
+    {2028, "Expansion"}, {2029, "Moderation"}, {2030, "Recovery"}, {2031, "Strong growth"},
+    {2032, "Sustained growth"}, {2033, "Market correction"}, {2034, "Bear market"}, {2035, "Recovery begins"},
+    {2036, "Strong recovery"}, {2037, "Expansion"}, {2038, "Growth"}, {2039, "Acceleration"},
+    {2040, "Bull market"}, {2041, "Growth continues"}, {2042, "Normalization"}, {2043, "Strong growth"},
+    {2044, "Moderation"}, {2045, "Steady growth"}, {2046, "Solid growth"}, {2047, "Market correction"},
+    {2048, "Bear market"}, {2049, "Recovery rally"}, {2050, "Recovery momentum"}, {2051, "Growth"},
+    {2052, "Normalization"}, {2053, "Expansion"}, {2054, "Cautious outlook"},{2055, "Steady growth"},
+    {2056, "Acceleration"}, {2057, "Moderation"}, {2058, "Minor correction"}, {2059, "Recovery"},
+    {2060, "Sustained growth"}, {2061, "Strong performance"}, {2062, "Normalizing"}, {2063, "Moderation"},
+    {2064, "Cautious outlook"}
 };
+
 
 // --- Constants and Helper Functions ---
 #define TIME_HORIZON 40 // Default simulation duration unless overridden in main
@@ -167,13 +182,51 @@ std::string format_usd(double value) {
     return "$" + s;
 }
 
-// --- Modified Backtesting Function ---
-double run_backtest(
+std::string get_retirement_phase(int age) {
+    if (age < 67) {
+        return "Pre-Ret";
+    }
+    else if (age >= 67 && age < 75) {
+        return "Go-Go";
+    }
+    else if (age >= 75 && age < 85) {
+        return "Slow-Go";
+    }
+    else {
+        return "No-Go";
+    }
+}
+
+// --- Struct to hold yearly simulation data ---
+struct YearlyData {
+    int year;
+    int age;
+    double start_savings;
+    double blended_return;
+    double dividend_income;
+    double required_spending;
+    double actual_spending;
+    double portfolio_percent_spent;
+    double social_security;
+    double work_income;
+    double available_after_reserve;
+    double end_savings;
+    double net_change;
+    bool is_failure_year;
+};
+
+// --- Backtesting Function with Target End Savings ---
+struct BacktestResult {
+    double final_savings;
+    int failure_year_count;
+    std::vector<YearlyData> yearly_data;
+};
+
+BacktestResult run_backtest_with_target(
     int start_simulation_year,
     int simulation_length_years,
     const std::vector<std::pair<int, double>>& historical_price_data,
     const std::vector<std::pair<int, double>>& speculative_price_data,
-    // --- Simulation Parameters ---
     double initial_savings,
     double work_income_start_param,
     double work_income_end,
@@ -184,37 +237,59 @@ double run_backtest(
     int social_security_age,
     double social_security_start,
     double cola_rate,
-    double stock_allocation,   // Stock allocation percentage (0.60)
-    double bond_allocation,    // Bond allocation percentage (0.30)
-    double cash_allocation,    // Cash allocation percentage (0.10)
-    double bond_annual_return, // Fixed annual return for bonds
-    double cash_annual_return  // Fixed annual return for cash
+    double stock_allocation,
+    double bond_allocation,
+    double cash_allocation,
+    double bond_annual_return,
+    double cash_annual_return,
+    double target_end_savings
 ) {
+    BacktestResult result;
+    result.failure_year_count = 0;
+
     int data_start_index = find_start_index(start_simulation_year, historical_price_data);
 
-    if (data_start_index == -1) { return -1e18; }
-
-    double savings = initial_savings;
-    double annual_spending = annual_spending_start;
-    const double FLAT_DIVIDEND_YIELD = 0.02;
-
-    if (PRINT_YEARLY_DETAILS) { // Print header if printing details
-        printf("--- Backtest Start Year: %d ---\n", start_simulation_year);
-        printf("Year | Hist Yr | Age | Start Sav | Blended Rtn | Div Inc | Spend | SS | Work Inc | End Sav\n");
-        printf("------------------------------------------------------------------------------------------------\n");
+    if (data_start_index == -1) {
+        result.final_savings = -1e18;
+        return result;
     }
 
+    const double FLAT_DIVIDEND_YIELD = 0.02;
+    const double FAILURE_THRESHOLD = 0.75;  // Spending is 25% less than required
+
+    // --- Spending Phase Parameters (applied after age 67) ---
+    // Phase 1: Ages 67-75 (Early retirement - "Go-go years")
+    const int PHASE1_AGE_START = 67;
+    const int PHASE1_AGE_END = 75;
+    const double PHASE1_INFLATION_RATE = inflation_rate;  // Full inflation + COLA
+    
+    // Phase 2: Ages 75-85 (Mid retirement - Reduced spending)
+    const int PHASE2_AGE_START = 75;
+    const int PHASE2_AGE_END = 85;
+    const double PHASE2_INFLATION_RATE = inflation_rate * 0.5;  // Half inflation, no COLA
+    
+    // Phase 3: Ages 85+ (Late retirement - Minimal growth)
+    const int PHASE3_AGE_START = 85;
+    const double PHASE3_INFLATION_RATE = 0.0;  // Flat spending
+
+    // --- SINGLE PASS: Run simulation year by year ---
+    double savings = initial_savings;
+    double annual_spending = annual_spending_start;
+
+    if (PRINT_YEARLY_DETAILS) {
+        printf("--- Backtest Start Year: %d | Target End Savings: $%.0f ---\n", 
+               start_simulation_year, target_end_savings);
+        printf("Year | Age | Start Sav | Return | Dividend | Required | Available | Actual | %% Port | Fail | End Sav\n");
+        printf("-----------------------------------------------------------------------------------------------------\n");
+    }
 
     for (int year_offset = 0; year_offset < simulation_length_years; ++year_offset) {
         int age = current_age + year_offset;
         int historical_year = start_simulation_year + year_offset;
 
-        double start_of_year_savings = savings; // Store for printing if needed
+        double start_of_year_savings = savings;
         
-        // Get stock return from appropriate data source
         double stock_return = get_stock_return(historical_year, historical_price_data, speculative_price_data);
-        
-        // Calculate blended return based on 60/30/10 allocation
         double blended_return = (stock_allocation * stock_return) + 
                                 (bond_allocation * bond_annual_return) + 
                                 (cash_allocation * cash_annual_return);
@@ -222,18 +297,16 @@ double run_backtest(
         double dividend_income = savings * FLAT_DIVIDEND_YIELD;
         double savings_after_price_change = savings * (1.0 + blended_return);
 
-        // --- Calculate Income (Work + SS) ---
         double current_work_income = 0.0;
-        double retirement_income_target = work_income_end;
-        if (age >= retirement_age) { current_work_income = retirement_income_target; }
+        if (age >= retirement_age) { current_work_income = work_income_end; }
         else if (age >= current_age) {
             int total_working_years = retirement_age - current_age;
             if (total_working_years > 0) {
                 double working_progress = (double)(age - current_age) / total_working_years;
-                current_work_income = work_income_start_param + working_progress * (retirement_income_target - work_income_start_param);
-                current_work_income = fmax(retirement_income_target, current_work_income);
+                current_work_income = work_income_start_param + working_progress * (work_income_end - work_income_start_param);
+                current_work_income = fmax(work_income_end, current_work_income);
             }
-            else { current_work_income = retirement_income_target; }
+            else { current_work_income = work_income_end; }
         }
         else { current_work_income = work_income_start_param; }
 
@@ -242,63 +315,140 @@ double run_backtest(
             social_security = social_security_start * pow((1.0 + cola_rate), (age - social_security_age));
         }
 
-        // --- Adjust Spending ---
-        double previous_spending = annual_spending; // Store before modification
-        if (age % 5 == 0 && age >= social_security_age) { annual_spending *= 0.98; }
-        if (age < social_security_age) { annual_spending *= (1.0 + inflation_rate); }
-        double current_annual_spending = annual_spending;
-
-        // --- Update Savings ---
-        savings = savings_after_price_change + dividend_income - current_annual_spending + social_security + current_work_income;
-
-        // --- Optional Detailed Yearly Print ---
-        if (PRINT_YEARLY_DETAILS) {
-            printf("%4d | %7d | %3d | %10.0f | %11.2f%% | %8.0f | %7.0f | %4.0f | %9.0f | %10.0f\n",
-                year_offset + 1, historical_year, age, start_of_year_savings, blended_return * 100.0,
-                dividend_income, current_annual_spending, social_security, current_work_income, savings);
+        // --- Apply spending adjustments based on life phase ---
+        double phase_inflation_rate = inflation_rate;  // Default (pre-67)
+        
+        if (age >= PHASE3_AGE_START) {
+            // Phase 3: Ages 85+ - Flat spending
+            phase_inflation_rate = PHASE3_INFLATION_RATE;
+        }
+        else if (age >= PHASE2_AGE_START) {
+            // Phase 2: Ages 75-85 - Reduced growth
+            phase_inflation_rate = PHASE2_INFLATION_RATE;
+        }
+        else if (age >= PHASE1_AGE_START) {
+            // Phase 1: Ages 67-75 - Full inflation
+            phase_inflation_rate = PHASE1_INFLATION_RATE;
         }
 
-        // --- Optional Early Exit ---
-        // if (savings < 0.0 && year_offset < simulation_length_years - 1) {
-        //     if (PRINT_YEARLY_DETAILS) printf("Note: Savings depleted early.\n");
-        //     return savings;
-        // }
+        // Apply inflation/growth adjustment
+        annual_spending *= (1.0 + phase_inflation_rate);
 
-    } // End yearly loop
+        double required_spending = annual_spending;
+        
+        // Calculate available funds this year (after growth but before spending)
+        double available_for_spending = savings_after_price_change + dividend_income + social_security + current_work_income;
+        
+        // Determine actual spending based on what's available and what's required
+        // Also ensure we maintain target end savings by year end
+        double remaining_years = simulation_length_years - year_offset;
+        double required_end_balance = target_end_savings;
+        
+        // Conservative estimate: reserve enough to reach target assuming 2% annual growth
+        double minimum_to_reserve = required_end_balance / pow(1.02, remaining_years);
+        double available_after_reserve = available_for_spending - minimum_to_reserve;
+        
+        double actual_spending = std::min(required_spending, available_after_reserve);
+        actual_spending = std::max(0.0, actual_spending);  // Can't spend negative
+        
+        // Check for failure year: actual spending is 25% less than required
+        bool is_failure_year = (actual_spending < required_spending * FAILURE_THRESHOLD);
+        if (is_failure_year) {
+            result.failure_year_count++;
+        }
 
-    if (PRINT_YEARLY_DETAILS) { // Print footer if printing details
-        printf("------------------------------------------------------------------------------------------------\n");
-        printf("End of Backtest for Start Year %d. Final Savings: %.2f\n\n", start_simulation_year, savings);
+        double portfolio_percent_spent = (start_of_year_savings > 0) ? (actual_spending / start_of_year_savings) : 0.0;
+
+        // Update savings with actual spending
+        savings = savings_after_price_change + dividend_income - actual_spending + social_security + current_work_income;
+        
+        double net_change = savings - start_of_year_savings;
+
+        YearlyData yd;
+        yd.year = historical_year;
+        yd.age = age;
+        yd.start_savings = start_of_year_savings;
+        yd.blended_return = blended_return;
+        yd.dividend_income = dividend_income;
+        yd.required_spending = required_spending;
+        yd.actual_spending = actual_spending;
+        yd.portfolio_percent_spent = portfolio_percent_spent;
+        yd.social_security = social_security;
+        yd.work_income = current_work_income;
+        yd.available_after_reserve = available_after_reserve;
+        yd.end_savings = savings;
+        yd.net_change = net_change;
+        yd.is_failure_year = is_failure_year;
+        result.yearly_data.push_back(yd);
+
+        if (PRINT_YEARLY_DETAILS) {
+            if (year_offset == 0) {
+                // Print header once at the start
+                printf("\n");
+                printf("%-6s %-4s %-8s %-14s %-10s %-12s %-12s %-12s %-12s %-12s %-12s %-14s %-14s %-12s %-8s\n",
+                    "Year", "Age", "Phase", "Begin Balance", "Blend Ret", "Dividend", "Work Inc", "SS Income", "Required Sp", "Actual Spend", "% of Port", "Avail Resrv", "End Balance", "Net Change", "Status");
+                printf("%-6s %-4s %-8s %-14s %-10s %-12s %-12s %-12s %-12s %-12s %-12s %-14s %-14s %-12s %-8s\n",
+                    "------", "---", "--------", "--------------", "----------", "=========", "========", "--------", "-----------", "-----------", "---------", "-----------", "--------------", "----------", "--------");
+            }
+            
+            // Print data row
+            std::string phase = get_retirement_phase(age);
+            std::string status = is_failure_year ? "FAIL" : "OK";
+            
+            printf("%-6d %-4d %-8s %13.0f %9.2f%% %11.0f %11.0f %11.0f %11.0f %11.0f %11.1f%% %13.0f %13.0f %+11.0f %-8s\n",
+                historical_year,
+                age,
+                phase.c_str(),
+                start_of_year_savings,
+                blended_return * 100.0,
+                dividend_income,
+                current_work_income,
+                social_security,
+                required_spending,
+                actual_spending,
+                portfolio_percent_spent * 100.0,
+                available_after_reserve,
+                savings,
+                net_change,
+                status.c_str());
+        }
     }
 
-    return savings;
-}
+    if (PRINT_YEARLY_DETAILS) {
+        printf("%-6s %-4s %-8s %-14s %-10s %-12s %-12s %-12s %-12s %-12s %-12s %-14s %-14s %-12s %-8s\n",
+            "======", "===", "========", "==============", "==========", "=========", "========", "========", "===========", "===========", "=========", "===========", "==============", "==========", "========");
+        printf("\nSummary: Start Year %d | Final Balance: $%.0f | Target: $%.0f | Failure Years: %d\n\n", 
+               start_simulation_year, savings, target_end_savings, result.failure_year_count);
+    }
 
+    result.final_savings = savings;
+    return result;
+}
 
 // --- Main Function for Comprehensive Backtesting ---
 int main() {
     std::srand(std::time(nullptr));
 
     // --- Define Simulation Parameters ---
-    // !!! Use your actual plan numbers !!!
     double initial_savings = 1500000;
     double work_income_start = 130000;
     double work_income_end = 0;
     int current_age = 50;
-    int retirement_age = 52;
-    double annual_spending_start = 75000;
-    double inflation_rate = 0.03;
+    int retirement_age = 55;
+    double annual_spending_start = 85000;
+    double inflation_rate = 0.0324;
     int social_security_age = 67;
     double social_security_start = 34000;
     double cola_rate = 0.02;
     int simulation_duration = TIME_HORIZON;
+    double target_end_savings = 0;
 
     // --- Asset Allocation Parameters ---
-    double stock_allocation = 0.70;   // 60% in stocks
-    double bond_allocation = 0.20;    // 30% in bonds
-    double cash_allocation = 0.10;    // 10% in cash
-    double bond_annual_return = 0.04; // 3% annual return for bonds
-    double cash_annual_return = 0.03; // 5% annual return for cash (e.g., high-yield savings)
+    double stock_allocation = 0.60;
+    double bond_allocation = 0.20;
+    double cash_allocation = 0.20;
+    double bond_annual_return = 0.04;
+    double cash_annual_return = 0.03;
 
     // --- Data Checks ---
     if (historical_sp500_price_returns.empty()) {
@@ -308,130 +458,85 @@ int main() {
     // --- Comprehensive Backtesting Loop ---
     int success_count = 0;
     int total_runs = 0;
-    int data_error_runs = 0;
-    int start_year_error_runs = 0; // Should be 0 with this loop structure
+    int failure_years_total = 0;
 
     int first_possible_start_year = historical_sp500_price_returns[0].first;
     int last_possible_start_year_index = historical_sp500_price_returns.size() - 1;
     int last_possible_start_year = historical_sp500_price_returns[last_possible_start_year_index].first;
 
-    std::cout << "--- Running Comprehensive Backtest ---" << std::endl;
-    std::cout << "Data Range Available: " << historical_sp500_price_returns[0].first << " - " << historical_sp500_price_returns.back().first << std::endl;
-    std::cout << "Speculative Data Range: " << speculative_sp500_returns[0].first << " - " << speculative_sp500_returns.back().first << std::endl;
+    std::cout << "--- Running Comprehensive Backtest with Target End Savings ---" << std::endl;
+    std::cout << "Data Range: " << historical_sp500_price_returns[0].first << " - " << historical_sp500_price_returns.back().first << std::endl;
+    std::cout << "Speculative Data: " << speculative_sp500_returns[0].first << " - " << speculative_sp500_returns.back().first << std::endl;
     std::cout << "Simulation Duration: " << simulation_duration << " years" << std::endl;
     std::cout << "Asset Allocation: " << (stock_allocation * 100.0) << "% Stocks / " 
               << (bond_allocation * 100.0) << "% Bonds / " << (cash_allocation * 100.0) << "% Cash" << std::endl;
-    std::cout << "Fixed Returns: " << (bond_annual_return * 100.0) << "% Bonds, " 
-              << (cash_annual_return * 100.0) << "% Cash" << std::endl;
-    std::cout << "Testing All Possible Start Years: " << first_possible_start_year << " to " << last_possible_start_year << std::endl;
-    std::cout << "Dividend Yield Assumption: Flat 3.00%" << std::endl;
+    printf("Target End Savings: $%.0f (Minimum Required Balance)\n", target_end_savings);
     printf("Parameters: InitSav $%.0f, StartSpend $%.0f, RetAge %d, SSStart $%.0f@%d, Infl %.2f%%\n",
         initial_savings, annual_spending_start, retirement_age, social_security_start, social_security_age, inflation_rate * 100.0);
+    printf("Failure Threshold: Spending < 75%% of Required\n");
     std::cout << "------------------------------------" << std::endl;
-    if (!PRINT_PER_RUN_SUMMARY && !PRINT_YEARLY_DETAILS) { // Only print if not showing details later
-        std::cout << "Running..." << std::endl;
-    }
 
     // --- Data storage for summary chart ---
-    std::vector<std::pair<int, double>> summary_results; // {start_year, final_savings}
-
+    std::vector<std::pair<int, BacktestResult>> summary_results;
 
     for (int start_year = first_possible_start_year; start_year <= last_possible_start_year; ++start_year) {
-
-        double final_savings = run_backtest(
+        BacktestResult result = run_backtest_with_target(
             start_year, simulation_duration, historical_sp500_price_returns, speculative_sp500_returns,
             initial_savings, work_income_start, work_income_end, current_age, retirement_age,
             annual_spending_start, inflation_rate, social_security_age, social_security_start, cola_rate,
-            stock_allocation, bond_allocation, cash_allocation, bond_annual_return, cash_annual_return
+            stock_allocation, bond_allocation, cash_allocation, bond_annual_return, cash_annual_return,
+            target_end_savings
         );
 
-        if (final_savings <= -1e18) {
-            start_year_error_runs++; // Should not happen if loop is correct
-        }
-        else if (final_savings <= -1e17) {
-            data_error_runs++;
-            if (PRINT_PER_RUN_SUMMARY) { // Print error if showing per-run results
-                printf("Start Year: %d | Error: Insufficient data length for full run.\n", start_year);
-            }
-        }
-        else {
-            total_runs++; // Only count runs that completed fully
-            bool success = (final_savings >= 0.0);
+        if (result.final_savings > -1e17) {
+            total_runs++;
+            bool success = (result.final_savings >= target_end_savings && result.failure_year_count == 0);
             if (success) {
                 success_count++;
             }
-            // --- Print Per-Run Summary ---
             if (PRINT_PER_RUN_SUMMARY) {
-                printf("Start Year: %d | Final Savings: %12.0f | Success: %s\n", // Formatted output
-                    start_year, final_savings, (success ? "Yes" : " No"));
+                printf("Start Year: %d | Final: $%12.0f | Target: $%12.0f | Failure Years: %2d | Success: %s\n",
+                    start_year, result.final_savings, target_end_savings, result.failure_year_count,
+                    (success ? "Yes" : " No"));
             }
-            summary_results.push_back({start_year, final_savings}); // Store results for summary chart
-        }
-
-    } // End loop through start years
-
-    std::cout << "\n\n--- Data for Javascript Visualization ---" << std::endl;
-    std::cout << "// Copy the lines between the START and END markers into the 'backtestResultsData' array in the HTML file." << std::endl;
-    std::cout << "// --- START COPY ---" << std::endl;
-    std::cout << "[" << std::endl; // Start the Javascript array output
-
-    bool first_line = true;
-    for (int start_year = first_possible_start_year; start_year <= last_possible_start_year; ++start_year) {
-        double final_savings = run_backtest(
-            start_year, simulation_duration, historical_sp500_price_returns, speculative_sp500_returns,
-            initial_savings, work_income_start, work_income_end, current_age, retirement_age,
-            annual_spending_start, inflation_rate, social_security_age, social_security_start, cola_rate,
-            stock_allocation, bond_allocation, cash_allocation, bond_annual_return, cash_annual_return
-        );
-
-        if (final_savings > -1e17) { // Only include valid runs
-            if (!first_line) {
-                std::cout << "," << std::endl; // Add comma before subsequent lines
-            }
-            // Output in Javascript object format {x: year, y: savings}
-            printf("  { \"x\": %d, \"y\": %.2f }", start_year, final_savings);
-            first_line = false;
+            summary_results.push_back({start_year, result});
+            failure_years_total += result.failure_year_count;
         }
     }
-    std::cout << std::endl << "]" << std::endl; // End the Javascript array output
-    std::cout << "// --- END COPY ---" << std::endl;
-
 
     // --- Calculate and Print Final Summary ---
     if (total_runs > 0) {
         double success_rate = static_cast<double>(success_count) / total_runs * 100.0;
         std::cout << "\n--- Overall Backtesting Summary ---" << std::endl;
-        std::cout << "Total Historical Periods Tested (" << simulation_duration << " years each): " << total_runs << std::endl;
-        std::cout << "Successful Periods (Final Savings >= 0): " << success_count << std::endl;
+            std::cout << "Total Historical Periods Tested: " << total_runs << std::endl;
+        std::cout << "Successful Periods (Target Met + No Failure Years): " << success_count << std::endl;
         printf("Overall Success Rate: %.2f%%\n", success_rate);
-        if (data_error_runs > 0 || start_year_error_runs > 0) {
-            printf("Note: %d run(s) stopped early due to insufficient data length, %d failed on start year lookup.\n",
-                data_error_runs, start_year_error_runs);
-        }
+        printf("Total Failure Years Across All Periods: %d\n", failure_years_total);
         std::cout << "----------------------------------" << std::endl;
-    }
-    else {
-        std::cout << "\nNo valid backtest runs were completed." << std::endl;
-        if (data_error_runs > 0 || start_year_error_runs > 0) {
-            printf("Note: %d run(s) stopped early due to insufficient data length, %d failed on start year lookup.\n",
-                data_error_runs, start_year_error_runs);
-        }
     }
 
     // --- Print Summary Chart ---
-    std::cout << "\n--- Summary Chart: Start Year | Starting Balance | Ending Balance | Reason ---\n";
-    std::cout << std::setw(10) << "Year" << " | "
-          << std::setw(16) << "Start Balance" << " | "
-          << std::setw(15) << "End Balance" << " | "
+    std::cout << "\n--- Summary Chart ---\n";
+    std::cout << std::setw(8) << "Year" << " | "
+          << std::setw(14) << "End Balance" << " | "
+          << std::setw(14) << "vs Target" << " | "
+          << std::setw(8) << "Fail Yrs" << " | "
           << "Reason\n";
-    std::cout << "-------------------------------------------------------------------------------\n";
-    for (const auto& res : summary_results) {
-        std::cout << std::setw(10) << res.first << " | "
-              << std::setw(16) << format_usd(initial_savings) << " | "
-              << std::setw(15) << format_usd(res.second) << " | "
-              << get_return_reason(res.first) << "\n";
+    std::cout << "--------------------------------------------------------------------------\n";
+    for (const auto& pair : summary_results) {
+        int year = pair.first;
+        const BacktestResult& result = pair.second;
+        double difference = result.final_savings - target_end_savings;
+        bool success = (result.final_savings >= target_end_savings && result.failure_year_count == 0);
+
+        std::cout << std::setw(8) << year << " | "
+              << std::setw(14) << format_usd(result.final_savings) << " | "
+              << std::setw(14) << format_usd(difference) << " | "
+              << std::setw(8) << result.failure_year_count << " | "
+              << (success ? "✓ " : "✗ ")
+              << get_return_reason(year) << "\n";
     }
-    std::cout << "-------------------------------------------------------------------------------\n";
+    std::cout << "--------------------------------------------------------------------------\n";
 
     return 0;
 }
